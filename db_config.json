@@ -1,0 +1,1 @@
+{"driver": "ODBC Driver 17 for SQL Server", "server": "localhost", "database": "AdventureWorks2022", "auth_type": "Windows", "username": "", "password": "", "api_key": "local-machine-token", "sql_dialect": "Microsoft SQL Server"}
