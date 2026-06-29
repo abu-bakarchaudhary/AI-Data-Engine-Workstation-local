@@ -1,7 +1,7 @@
 import sqlglot
 from sqlglot.errors import ParseError
 from openai import OpenAI
-import setup_gui
+import setup_wizard
 
 LOCAL_LLM_URL = "http://localhost:11434/v1"
 LOCAL_MODEL_NAME = "qwen2.5-coder:1.5b"
@@ -22,7 +22,7 @@ def offline_syntax_check(sql_query, dialect):
         return False, str(e)
 
 def execute_auto_heal_loop(original_prompt, broken_sql, error_message, dialect):
-    config = setup_gui.load_config()
+    config = setup_wizard.load_config()
     if not config: return broken_sql
         
     client = OpenAI(api_key="local-machine-token", base_url=LOCAL_LLM_URL)
