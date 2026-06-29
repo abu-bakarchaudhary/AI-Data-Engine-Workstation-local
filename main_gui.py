@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-import setup_gui
+import setup_wizard
 import intent_engine
 import api_client
 import schema_manager
@@ -26,7 +26,7 @@ class DataEngineWorkstation:
         self.root.geometry("1150x780")
         self.root.configure(bg=BG_MAIN)
         
-        self.active_config = setup_gui.load_config()
+        self.active_config = setup_wizard.load_config()
         self.saved_dialect = self.active_config.get("sql_dialect", "Microsoft SQL Server") if self.active_config else "Microsoft SQL Server"
         
         self.apply_styles()
@@ -78,7 +78,7 @@ class DataEngineWorkstation:
         self.root.update()
         
         w_width = self.canvas_bg.winfo_width()
-        setup_gui.draw_rounded_base(self.canvas_bg, 2, 2, w_width-2, 85, 12, BG_CARD)
+        setup_wizard.draw_rounded_base(self.canvas_bg, 2, 2, w_width-2, 85, 12, BG_CARD)
         self.canvas_bg.create_text(20, 24, text="Natural Language Context Request Input Channel", font=(FONT_UI_REGULAR, 10, "bold"), fill=COLOR_BRAND, anchor="w")
         
         self.entry_question = tk.Entry(frame_input, font=(FONT_UI_REGULAR, 11), bg=BG_MAIN, fg=COLOR_TEXT_MAIN, insertbackground=COLOR_TEXT_MAIN, relief="flat", bd=0, highlightthickness=1, highlightbackground=COLOR_BORDER, highlightcolor=COLOR_BRAND)
@@ -112,11 +112,11 @@ class DataEngineWorkstation:
             self.entry_custom_dialect.pack(side="left", padx=10, ipady=3)
         else:
             self.entry_custom_dialect.pack_forget()
-        cfg = setup_gui.load_config()
+        cfg = setup_wizard.load_config()
         if cfg:
             cfg["sql_dialect"] = sel
             cfg["custom_dialect_name"] = self.entry_custom_dialect.get().strip()
-            setup_gui.save_config(cfg)
+            setup_wizard.save_config(cfg)
 
     def get_dialect(self):
         sel = self.combo_dialect.get()
@@ -238,7 +238,7 @@ class DataEngineWorkstation:
         self.root.mainloop()
 
 if __name__ == "__main__":
-    saved_profile = setup_gui.load_config()
+    saved_profile = setup_wizard.load_config()
     if saved_profile:
         root_init = tk.Tk(); root_init.withdraw()
         use_saved = messagebox.askyesnocancel("System Session Active", "Sync and reload active configuration space parameters?")
@@ -246,6 +246,6 @@ if __name__ == "__main__":
         if use_saved is True:
             DataEngineWorkstation().run()
         elif use_saved is False:
-            setup_gui.SetupWizard(lambda: DataEngineWorkstation().run()).run()
+            setup_wizard.SetupWizard(lambda: DataEngineWorkstation().run()).run()
     else:
-        setup_gui.SetupWizard(lambda: DataEngineWorkstation().run()).run()
+        setup_wizard.SetupWizard(lambda: DataEngineWorkstation().run()).run()
