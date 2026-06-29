@@ -1,13 +1,13 @@
 import os
 import json
 import pyodbc
-import setup_gui
+import setup_wizard
 import intent_engine
 
 MANIFEST_FILE = "db_manifest.json"
 
 def get_connection_string():
-    config = setup_gui.load_config()
+    config = setup_wizard.load_config()
     if not config: return ""
     base_str = f"Driver={config['driver']};Server={config['server']};Database={config['database']};"
     if config['auth_type'] == "Windows":
