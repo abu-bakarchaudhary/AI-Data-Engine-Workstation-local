@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+chroma_rag_store/
+db_config.json
+config.json
+*.manifest.json
