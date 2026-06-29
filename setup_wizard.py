@@ -5,7 +5,7 @@ import os
 import pyodbc
 import socket
 
-CONFIG_FILE = "db_config.json"
+CONFIG_FILE = "config.json"
 BG_MAIN = "#F8FAFC"          
 BG_CARD = "#FFFFFF"          
 COLOR_TEXT_MAIN = "#0F172A"  
@@ -67,7 +67,7 @@ class SetupWizard:
         style.theme_use("clam")
         style.configure(".", background=BG_MAIN, foreground=COLOR_TEXT_MAIN)
         
-        tk.Label(self.window, text="⚙ INITIALIZE DATA MANAGEMENT PLATFORM", font=("Segoe UI", 12, "bold"), fg=COLOR_BRAND, bg=BG_MAIN).pack(pady=(25, 15))
+        tk.Label(self.window, text="? INITIALIZE DATA MANAGEMENT PLATFORM", font=("Segoe UI", 12, "bold"), fg=COLOR_BRAND, bg=BG_MAIN).pack(pady=(25, 15))
         self.build_ui()
         
     def build_ui(self):
@@ -123,7 +123,7 @@ class SetupWizard:
         self.combo_db = ttk.Combobox(self.window, state="readonly", font=("Segoe UI", 10))
         c_disc.create_window(c1_w-20, 30, window=self.combo_db, width=240, height=28, anchor="e")
         
-        btn_disc = tk.Button(self.window, text="⎔ DISCOVER INSTANCE CATALOGS", command=self.scan_dbs, font=("Segoe UI", 9, "bold"), fg=BG_CARD, bg="#64748B", relief="flat", bd=0, cursor="hand2")
+        btn_disc = tk.Button(self.window, text="? DISCOVER INSTANCE CATALOGS", command=self.scan_dbs, font=("Segoe UI", 9, "bold"), fg=BG_CARD, bg="#64748B", relief="flat", bd=0, cursor="hand2")
         c_disc.create_window(20, 72, window=btn_disc, width=c1_w-40, height=34, anchor="w")
 
         frame_block2 = tk.Frame(self.window, bg=BG_MAIN, padx=30)
@@ -138,7 +138,7 @@ class SetupWizard:
         c2.create_window(c1_w-20, 54, window=self.ent_key, width=240, height=26, anchor="e")
         self.ent_key.insert(0, "local-machine-token")
 
-        btn_run = tk.Button(self.window, text="🚀 INITIALIZE OFFLINE WORKSTATION", command=self.save_and_continue, font=("Segoe UI", 10, "bold"), fg=BG_CARD, bg=COLOR_BRAND, relief="flat", bd=0, cursor="hand2")
+        btn_run = tk.Button(self.window, text="?? INITIALIZE OFFLINE WORKSTATION", command=self.save_and_continue, font=("Segoe UI", 10, "bold"), fg=BG_CARD, bg=COLOR_BRAND, relief="flat", bd=0, cursor="hand2")
         btn_run.pack(side="bottom", fill="x", padx=30, pady=20)
         
     def toggle_fields(self):
