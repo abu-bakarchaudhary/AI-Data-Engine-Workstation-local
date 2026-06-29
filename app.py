@@ -4,7 +4,7 @@ import setup_wizard
 import intent_enhancer
 import sql_compiler
 import schema_manager
-import linter_agent
+import sql_linter
 
 BG_MAIN = "#F8FAFC"          
 BG_CARD = "#FFFFFF"          
@@ -145,11 +145,11 @@ class DataEngineWorkstation:
                 self.lbl_status.config(text="? GENERATOR ERROR: Mapping failed.", fg="#EF4444")
                 return
 
-            is_valid, lint_error = linter_agent.offline_syntax_check(generated_sql, dialect)
+            is_valid, lint_error = sql_linter.offline_syntax_check(generated_sql, dialect)
             if not is_valid:
                 self.lbl_status.config(text="?? LINTER WARNING: Activating Agentic Auto-Heal Loop...", fg=COLOR_BRAND)
                 self.root.update()
-                generated_sql = linter_agent.execute_auto_heal_loop(approved_text, generated_sql, lint_error, dialect)
+                generated_sql = sql_linter.execute_auto_heal_loop(approved_text, generated_sql, lint_error, dialect)
 
             self.text_sql.config(state="normal")
             self.text_sql.delete("1.0", tk.END)
@@ -161,7 +161,7 @@ class DataEngineWorkstation:
             except Exception as db_err:
                 self.lbl_status.config(text="?? DB EXCEPTION: Re-triggering Auto-Heal Loop...", fg=COLOR_BRAND)
                 self.root.update()
-                healed_sql = linter_agent.execute_auto_heal_loop(approved_text, generated_sql, str(db_err), dialect)
+                healed_sql = sql_linter.execute_auto_heal_loop(approved_text, generated_sql, str(db_err), dialect)
                 
                 self.text_sql.config(state="normal")
                 self.text_sql.delete("1.0", tk.END)
