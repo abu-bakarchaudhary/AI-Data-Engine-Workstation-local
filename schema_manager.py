@@ -2,7 +2,7 @@ import os
 import json
 import pyodbc
 import setup_wizard
-import intent_engine
+import intent_enhancer
 
 MANIFEST_FILE = "db_manifest.json"
 
@@ -51,7 +51,7 @@ def fetch_complete_database_schema():
             rag_payload[table_name] = table_block
             
         # Automatically updates ChromaDB index coordinates upon database mapping
-        intent_engine.sync_rag_vector_database(rag_payload)
+        intent_enhancer.sync_rag_vector_database(rag_payload)
         
         return schema_text
     except Exception as e:

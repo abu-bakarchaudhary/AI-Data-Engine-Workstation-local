@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 import setup_wizard
-import intent_engine
-import api_client
+import intent_enhancer
+import sql_compiler
 import schema_manager
 import linter_agent
 
@@ -54,7 +54,7 @@ class DataEngineWorkstation:
     def build_ui(self):
         frame_header = tk.Frame(self.root, bg=BG_MAIN, padx=30, pady=15)
         frame_header.pack(fill="x")
-        tk.Label(frame_header, text="✦ OFFLINE LOCAL AI DATA WORKSTATION", font=(FONT_UI_REGULAR, 12, "bold"), fg=COLOR_TEXT_MAIN, bg=BG_MAIN).pack(side="left")
+        tk.Label(frame_header, text="? OFFLINE LOCAL AI DATA WORKSTATION", font=(FONT_UI_REGULAR, 12, "bold"), fg=COLOR_TEXT_MAIN, bg=BG_MAIN).pack(side="left")
         
         frame_ctrls = tk.Frame(frame_header, bg=BG_MAIN)
         frame_ctrls.pack(side="right")
@@ -85,7 +85,7 @@ class DataEngineWorkstation:
         self.canvas_bg.create_window(20, 52, window=self.entry_question, width=w_width-220, height=34, anchor="w")
         self.entry_question.bind("<Return>", lambda e: self.process_pipeline())
         
-        btn_run = self.create_pill_btn(frame_input, "✦ EXECUTE PIPELINE", self.process_pipeline, True)
+        btn_run = self.create_pill_btn(frame_input, "? EXECUTE PIPELINE", self.process_pipeline, True)
         self.canvas_bg.create_window(w_width-20, 52, window=btn_run, anchor="e")
         
         self.lbl_status = tk.Label(self.root, text="Agnostic semantic caching pipeline synchronized. Standing by...", font=(FONT_UI_REGULAR, 9, "italic"), fg=COLOR_TEXT_MUTED, bg=BG_MAIN)
@@ -93,7 +93,7 @@ class DataEngineWorkstation:
 
         frame_term = tk.Frame(self.root, bg=BG_MAIN, padx=30, pady=5)
         frame_term.pack(fill="x")
-        tk.Label(frame_term, text="⎔ Compiled SQL Translation Engine Output Verification Block View", font=(FONT_UI_REGULAR, 9, "bold"), fg=COLOR_TEXT_MUTED, bg=BG_MAIN).pack(anchor="w", pady=(5, 4))
+        tk.Label(frame_term, text="? Compiled SQL Translation Engine Output Verification Block View", font=(FONT_UI_REGULAR, 9, "bold"), fg=COLOR_TEXT_MUTED, bg=BG_MAIN).pack(anchor="w", pady=(5, 4))
         self.text_sql = tk.Text(frame_term, height=5, font=(FONT_UI_CODE, 10), bg=COLOR_CONSOLE_BG, fg=COLOR_BRAND, wrap="word", relief="flat", bd=0, padx=15, pady=12)
         self.text_sql.pack(fill="x")
 
@@ -127,27 +127,27 @@ class DataEngineWorkstation:
         if not raw_prompt: return
             
         try:
-            self.lbl_status.config(text="✦ PASS 0: Compiling local index candidate options...", fg=COLOR_BRAND)
+            self.lbl_status.config(text="? PASS 0: Compiling local index candidate options...", fg=COLOR_BRAND)
             self.root.update()
             
-            enhanced_spec = intent_engine.enhance_user_prompt(raw_prompt)
+            enhanced_spec = intent_enhancer.enhance_user_prompt(raw_prompt)
             is_verified, approved_text = self.launch_gate_modal(raw_prompt, enhanced_spec)
             if not is_verified or not approved_text:
-                self.lbl_status.config(text="⎔ TRANSACTION HALTED: Request dropped.", fg=COLOR_TEXT_MUTED)
+                self.lbl_status.config(text="? TRANSACTION HALTED: Request dropped.", fg=COLOR_TEXT_MUTED)
                 return
                 
             dialect = self.get_dialect()
-            self.lbl_status.config(text=f"🤖 COMPILING: Generating secure {dialect} values...", fg=COLOR_BRAND)
+            self.lbl_status.config(text=f"?? COMPILING: Generating secure {dialect} values...", fg=COLOR_BRAND)
             self.root.update()
             
-            generated_sql = api_client.translate_english_to_sql(approved_text, dialect)
+            generated_sql = sql_compiler.translate_english_to_sql(approved_text, dialect)
             if not generated_sql:
-                self.lbl_status.config(text="⎔ GENERATOR ERROR: Mapping failed.", fg="#EF4444")
+                self.lbl_status.config(text="? GENERATOR ERROR: Mapping failed.", fg="#EF4444")
                 return
 
             is_valid, lint_error = linter_agent.offline_syntax_check(generated_sql, dialect)
             if not is_valid:
-                self.lbl_status.config(text="🩹 LINTER WARNING: Activating Agentic Auto-Heal Loop...", fg=COLOR_BRAND)
+                self.lbl_status.config(text="?? LINTER WARNING: Activating Agentic Auto-Heal Loop...", fg=COLOR_BRAND)
                 self.root.update()
                 generated_sql = linter_agent.execute_auto_heal_loop(approved_text, generated_sql, lint_error, dialect)
 
@@ -159,7 +159,7 @@ class DataEngineWorkstation:
             try:
                 columns, data = schema_manager.execute_raw_sql(generated_sql)
             except Exception as db_err:
-                self.lbl_status.config(text="🩹 DB EXCEPTION: Re-triggering Auto-Heal Loop...", fg=COLOR_BRAND)
+                self.lbl_status.config(text="?? DB EXCEPTION: Re-triggering Auto-Heal Loop...", fg=COLOR_BRAND)
                 self.root.update()
                 healed_sql = linter_agent.execute_auto_heal_loop(approved_text, generated_sql, str(db_err), dialect)
                 
@@ -177,10 +177,10 @@ class DataEngineWorkstation:
                     self.tree.heading(col, text=f"  {col}")
                     self.tree.column(col, width=150, anchor="w", stretch=False)
                 for row in data: self.tree.insert("", "end", values=row)
-                self.lbl_status.config(text=f"✦ VERIFIED SUCCESS: Pulled {len(data)} matrix row variants.", fg=COLOR_ACCENT_GREEN)
+                self.lbl_status.config(text=f"? VERIFIED SUCCESS: Pulled {len(data)} matrix row variants.", fg=COLOR_ACCENT_GREEN)
                 
         except Exception as global_err:
-            self.lbl_status.config(text="⎔ COMPILER PIPELINE RUNTIME CRASH.", fg="#EF4444")
+            self.lbl_status.config(text="? COMPILER PIPELINE RUNTIME CRASH.", fg="#EF4444")
             messagebox.showerror("Pipeline Failure", f"Fatal engine exception handled:\n\n{global_err}")
 
     def launch_gate_modal(self, raw, enhanced):
@@ -192,7 +192,7 @@ class DataEngineWorkstation:
         gate.grab_set()
         
         state = {"verified": False, "text": ""}
-        tk.Label(gate, text="✦ INTENT CLARIFICATION ENGINE WORKSPACE", font=(FONT_UI_REGULAR, 12, "bold"), fg=COLOR_BRAND, bg=BG_MAIN).pack(anchor="w", padx=30, pady=(20, 5))
+        tk.Label(gate, text="? INTENT CLARIFICATION ENGINE WORKSPACE", font=(FONT_UI_REGULAR, 12, "bold"), fg=COLOR_BRAND, bg=BG_MAIN).pack(anchor="w", padx=30, pady=(20, 5))
         
         frame_actions = tk.Frame(gate, bg=BG_MAIN, pady=15)
         frame_actions.pack(side="bottom", fill="x", padx=30)
@@ -220,15 +220,15 @@ class DataEngineWorkstation:
             
         def regenerate():
             current_raw = txt_editor.get("1.0", tk.END).strip() or raw
-            self.lbl_status.config(text="✦ RE-COMPILING: Fetching updated semantic optimization...", fg=COLOR_BRAND)
+            self.lbl_status.config(text="? RE-COMPILING: Fetching updated semantic optimization...", fg=COLOR_BRAND)
             self.root.update()
-            fresh_spec = intent_engine.enhance_user_prompt(current_raw)
+            fresh_spec = intent_enhancer.enhance_user_prompt(current_raw)
             txt_editor.delete("1.0", tk.END)
             txt_editor.insert("1.0", fresh_spec)
-            self.lbl_status.config(text="✦ Optimization refreshed.", fg=COLOR_TEXT_MUTED)
+            self.lbl_status.config(text="? Optimization refreshed.", fg=COLOR_TEXT_MUTED)
 
-        self.create_pill_btn(frame_actions, "✦ CONFIRM & COMPILE CODE", approve, True).pack(side="right", padx=(15, 0))
-        self.create_pill_btn(frame_actions, "🔄 REGENERATE SPEC", regenerate, False).pack(side="right", padx=(15, 0))
+        self.create_pill_btn(frame_actions, "? CONFIRM & COMPILE CODE", approve, True).pack(side="right", padx=(15, 0))
+        self.create_pill_btn(frame_actions, "?? REGENERATE SPEC", regenerate, False).pack(side="right", padx=(15, 0))
         self.create_pill_btn(frame_actions, "ABORT TRANSACTION", gate.destroy, False).pack(side="right")
         
         self.root.wait_window(gate)
