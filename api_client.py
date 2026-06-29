@@ -1,5 +1,5 @@
 from openai import OpenAI
-import setup_gui
+import setup_wizard
 import schema_manager
 
 LOCAL_LLM_URL = "http://localhost:11434/v1"
@@ -19,7 +19,7 @@ CRITICAL COMPILING CONSTRAINTS & LOGICAL RULES:
 """
 
 def translate_english_to_sql(approved_prompt, target_dialect):
-    config = setup_gui.load_config()
+    config = setup_wizard.load_config()
     if not config: return None
         
     complete_schema = schema_manager.fetch_complete_database_schema()
